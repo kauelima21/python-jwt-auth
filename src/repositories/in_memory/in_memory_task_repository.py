@@ -15,6 +15,18 @@ class InMemoryTaskRepository(TaskRepository):
   def findAll(self) -> List[Task]:
     return self._data
 
+  def delete(self, id: str) -> Task:
+    index = 0
+    task_to_delete = None
+
+    for i, task in enumerate(self._data):
+      if task.get("id") == id:
+        index = i
+        task_to_delete = task
+
+    self._data.pop(index)
+    return task_to_delete
+
   def complete(self, id: str) -> Task:
     index = 0
     task_to_complete = None
