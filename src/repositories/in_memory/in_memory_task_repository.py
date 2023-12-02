@@ -26,8 +26,19 @@ class InMemoryTaskRepository(TaskRepository):
 
     task_to_complete["validated_at"] = datetime.now()
     task_to_complete["updated_at"] = datetime.now()
+
     self._data[index] = task_to_complete
     return task_to_complete
+
+  def update(self, task: Task) -> Task:
+    index = 0
+
+    for i, item in enumerate(self._data):
+      if item.get("id") == id:
+        index = i
+
+    self._data[index] = task
+    return task
 
   def save(self, task: Task) -> Task:
     self._data.append(task)
