@@ -27,4 +27,3 @@ def test_it_shoud_be_able_to_fetch_all_tasks(task_repository):
 
 if __name__ == "__main__":
     pytest.main()
-

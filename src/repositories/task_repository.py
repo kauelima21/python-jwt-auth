@@ -13,5 +13,9 @@ class TaskRepository(ABC):
     pass
 
   @abstractmethod
+  def complete(self, id: str) -> Task:
+    pass
+
+  @abstractmethod
   def save(self, task: Task) -> Task:
     pass

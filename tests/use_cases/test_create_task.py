@@ -26,4 +26,3 @@ def test_it_shoud_be_able_to_create_a_task(task_data):
 
 if __name__ == "__main__":
     pytest.main()
-

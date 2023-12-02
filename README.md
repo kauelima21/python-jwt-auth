@@ -8,5 +8,6 @@ A simple TODO CRUD example to practice.
 - [x] Create Tasks
 - [x] Get all Tasks
 - [x] Get a specific Task by id
-- [ ] Complete a specific Task by id
+- [x] Complete a specific Task by id
+- [ ] Update a specific Task by id
 - [ ] Delete a specific Task by id

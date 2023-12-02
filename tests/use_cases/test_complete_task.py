@@ -1,6 +1,6 @@
 import pytest
 from src.repositories.in_memory.in_memory_task_repository import InMemoryTaskRepository
-from src.use_cases.find_task import FindTaskUseCase
+from src.use_cases.complete_task import CompleteTaskUseCase
 
 
 @pytest.fixture()
@@ -19,11 +19,12 @@ def task_repository():
     yield task_repository
 
 
-def test_it_shoud_be_able_to_fetch_all_tasks(task_repository):
+def test_it_shoud_be_able_to_complete_a_task(task_repository):
     task_id = "id-2"
-    task = FindTaskUseCase(task_repository).execute(task_id)
+    task = CompleteTaskUseCase(task_repository).execute(task_id)
 
     assert task.get("title") == "My Task 02"
+    assert task.get("validated_at")
 
 
 if __name__ == "__main__":
