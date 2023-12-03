@@ -1,0 +1,28 @@
+service: crud-to-do
+
+frameworkVersion: ^3.22.0
+
+plugins:
+  - serverless-localstack
+
+custom:
+  defaultStage: local
+  profile: default
+  localstack:
+    debug: true
+    stages: [local]
+
+provider:
+  name: aws
+  runtime: python3.8
+  memorySize: 128
+  stage: local
+  region: us-east-1
+
+functions:
+  createToDo:
+    handler: src/handlers/tasks/create.lambda_handler
+    events:
+      - http:
+          path: tasks
+          method: post

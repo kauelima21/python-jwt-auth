@@ -15,3 +15,5 @@ A simple TODO CRUD example to practice.
 ### Next Steps
 
 - [x] Implement Custom Exceptions
+- [ ] Create Localstack container
+- [ ] Deploy a lambda function
