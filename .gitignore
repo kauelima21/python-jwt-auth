@@ -1,5 +1,6 @@
 .pytest_cache
 .vscode
+.serverless
 node_modules
 src/__pycache__
 tests/__pycache__

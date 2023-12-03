@@ -25,7 +25,7 @@ class BotoTaskRepository(TaskRepository):
     return task_array[0]
 
   def findAll(self) -> List[Task]:
-    return self._data
+    return self._table.scan()["Items"]
 
   def delete(self, id: str) -> Task:
     index = 0
