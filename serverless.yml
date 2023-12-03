@@ -5,12 +5,25 @@ frameworkVersion: ^3.22.0
 plugins:
   - serverless-localstack
 
+package:
+  individually: true
+  excludeDevDependencies: false
+  patterns:
+    - '!node_modules/**'
+    - '!.vscode/**'
+    - '!.pytest_cache/**'
+    - '!./**'
+    - src/**
+
+
 custom:
   defaultStage: local
   profile: default
   localstack:
     debug: true
-    stages: [local]
+    stages:
+      - local
+    endpointFile: localstack.json
 
 provider:
   name: aws
@@ -20,9 +33,15 @@ provider:
   region: us-east-1
 
 functions:
-  createToDo:
+  createTask:
     handler: src/handlers/tasks/create.lambda_handler
     events:
       - http:
           path: tasks
           method: post
+  fetchTasks:
+    handler: src/handlers/tasks/fetch.lambda_handler
+    events:
+      - http:
+          path: tasks
+          method: get
