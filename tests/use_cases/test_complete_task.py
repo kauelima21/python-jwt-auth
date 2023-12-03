@@ -20,7 +20,7 @@ def task_repository():
     yield task_repository
 
 
-def test_it_shoud_be_able_to_complete_a_task(task_repository):
+def test_it_shoud_be_able_to_complete_a_task_that_not_exists(task_repository):
     task_id = "id-2"
     task = CompleteTaskUseCase(task_repository).execute(task_id)
 
