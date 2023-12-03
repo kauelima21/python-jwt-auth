@@ -14,4 +14,4 @@ A simple TODO CRUD example to practice.
 
 ### Next Steps
 
-- [ ] Implement Custom Exceptions
+- [x] Implement Custom Exceptions
