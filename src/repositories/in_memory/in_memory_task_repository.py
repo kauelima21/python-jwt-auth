@@ -10,7 +10,11 @@ class InMemoryTaskRepository(TaskRepository):
 
   def findById(self, id: str) -> Task:
     filtered_task = filter(lambda task: task.get("id") == id, self._data)
-    return list(filtered_task)[0]
+    task_array = list(filtered_task)
+    if len(task_array) <= 0:
+      return None
+
+    return task_array[0]
 
   def findAll(self) -> List[Task]:
     return self._data

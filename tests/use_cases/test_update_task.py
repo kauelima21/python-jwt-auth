@@ -1,5 +1,6 @@
 import pytest
 from src.repositories.in_memory.in_memory_task_repository import InMemoryTaskRepository
+from src.use_cases.errors.resource_not_found import ResourceNotFoundError
 from src.use_cases.update_task import UpdateTaskUseCase
 
 
@@ -27,6 +28,17 @@ def test_it_shoud_be_able_to_update_a_task(task_repository):
     })
 
     assert task.get("title") == "My Nice Task"
+
+
+def test_it_should_not_be_able_to_complete_a_task(task_repository):
+    task_id = "id-5"
+
+    with pytest.raises(ResourceNotFoundError) as err:
+        UpdateTaskUseCase(task_repository).execute({
+            "id": task_id,
+            "title": "My Nice Task"
+        })
+    assert str(err.value) == "Resource Not Found"
 
 
 if __name__ == "__main__":

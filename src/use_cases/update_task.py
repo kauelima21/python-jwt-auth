@@ -2,6 +2,7 @@ from typing import TypedDict, Optional
 from datetime import datetime
 from src.repositories.task_repository import TaskRepository
 from src.entities.task import Task
+from src.use_cases.errors.resource_not_found import ResourceNotFoundError
 
 
 class UpdateTaskUseCaseRequest(TypedDict):
@@ -18,8 +19,7 @@ class UpdateTaskUseCase:
     task = self._task_repository.findById(request["id"])
 
     if not task:
-      # TODO: Create Errors Exceptions
-      return None
+      raise ResourceNotFoundError("Resource Not Found")
 
     task["title"] = request.get("title") if request.get("title") else task["title"]
     task["description"] = request.get("description") if request.get("description") else task["description"]
