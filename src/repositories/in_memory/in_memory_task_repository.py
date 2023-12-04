@@ -19,24 +19,24 @@ class InMemoryTaskRepository(TaskRepository):
   def findAll(self) -> List[Task]:
     return self._data
 
-  def delete(self, id: str) -> Task:
+  def delete(self, task: Task) -> Task:
     index = 0
     task_to_delete = None
 
     for i, task in enumerate(self._data):
-      if task.get("id") == id:
+      if task.get("id") == task.get("id"):
         index = i
         task_to_delete = task
 
     self._data.pop(index)
     return task_to_delete
 
-  def complete(self, id: str) -> Task:
+  def complete(self, task: Task) -> Task:
     index = 0
     task_to_complete = None
 
     for i, task in enumerate(self._data):
-      if task.get("id") == id:
+      if task.get("id") == task.get("id"):
         index = i
         task_to_complete = task
 
@@ -50,7 +50,7 @@ class InMemoryTaskRepository(TaskRepository):
     index = 0
 
     for i, item in enumerate(self._data):
-      if item.get("id") == id:
+      if item.get("id") == task.get("id"):
         index = i
 
     self._data[index] = task

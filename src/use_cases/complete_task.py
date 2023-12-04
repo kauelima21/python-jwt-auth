@@ -12,4 +12,4 @@ class CompleteTaskUseCase:
       if not task:
         raise ResourceNotFoundError("Resource Not Found")
 
-      return self._task_repository.complete(task_id)
+      return self._task_repository.complete(task)

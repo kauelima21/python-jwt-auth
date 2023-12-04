@@ -1,9 +1,10 @@
+import boto3
+from boto3.dynamodb.conditions import Key
 from datetime import datetime
 from typing import List
 from src.entities.task import Task
 from src.repositories.task_repository import TaskRepository
 from botocore.exceptions import ClientError
-import boto3
 
 
 class BotoTaskRepository(TaskRepository):
@@ -11,62 +12,68 @@ class BotoTaskRepository(TaskRepository):
         self._data = []
         self._resource = boto3.resource(
           "dynamodb",
-          region_name="us-east-1",
-          endpoint_url="http://localhost:4566"
+          region_name="sa-east-1"
         )
         self._table = self._resource.Table("tasks")
 
     def findById(self, id: str) -> Task:
-      filtered_task = filter(lambda task: task.get("id") == id, self._data)
-      task_array = list(filtered_task)
-      if len(task_array) <= 0:
-        return None
+        response = self._table.query(
+          KeyConditionExpression=Key("id").eq(id)
+        )
+        
+        task = response["Items"][0]
 
-      return task_array[0]
+        return task
 
     def findAll(self) -> List[Task]:
         return self._table.scan()["Items"]
 
-    def delete(self, id: str) -> Task:
-      index = 0
-      task_to_delete = None
+    def delete(self, task: Task) -> Task:
+        self._table.delete_item(Key={
+            "id": task.get("id")
+        })
+        return task
 
-      for i, task in enumerate(self._data):
-        if task.get("id") == id:
-          index = i
-          task_to_delete = task
+    def complete(self, task: Task) -> Task:
+        response = self._table.update_item(
+          Key={
+            "id": task.get("id")
+          },
+          UpdateExpression="SET completed_at = :complete",
+          ExpressionAttributeValues={
+              ":complete": str(datetime.now())
+          },
+          ReturnValues="ALL_NEW"
+        )
 
-      self._data.pop(index)
-      return task_to_delete
-
-    def complete(self, id: str) -> Task:
-      index = 0
-      task_to_complete = None
-
-      for i, task in enumerate(self._data):
-        if task.get("id") == id:
-          index = i
-          task_to_complete = task
-
-      task_to_complete["validated_at"] = datetime.now()
-      task_to_complete["updated_at"] = datetime.now()
-
-      self._data[index] = task_to_complete
-      return task_to_complete
+        task_completed = response["Attributes"]
+        return task_completed
 
     def update(self, task: Task) -> Task:
-      index = 0
+        response = self._table.update_item(
+          Key={
+            "id": task.get("id")
+          },
+          UpdateExpression="SET #uat = :uat, #ti = :ti, #desc = :desc",
+          ExpressionAttributeNames={
+              "#uat": "updated_at",
+              "#ti": "title",
+              "#desc": "description",
+          },
+          ExpressionAttributeValues={
+              ":uat": str(datetime.now()),
+              ":ti": task.get("title"),
+              ":desc": task.get("description"),
+          },
+          ReturnValues="ALL_NEW"
+        )
 
-      for i, item in enumerate(self._data):
-        if item.get("id") == id:
-          index = i
-
-      self._data[index] = task
-      return task
+        task_completed = response["Attributes"]
+        return task_completed
 
     def save(self, task: Task) -> Task:
-      try:
-          self._table.put_item(
+        try:
+            self._table.put_item(
               Item={
                 "id": str(task.id),
                 "title": task.title,
@@ -74,8 +81,8 @@ class BotoTaskRepository(TaskRepository):
                 "created_at": str(task.created_at),
                 "updated_at": str(task.updated_at),
               }
-          )
-      except ClientError:
-          return False
+            )
+        except ClientError:
+            return False
 
-      return task
+        return task

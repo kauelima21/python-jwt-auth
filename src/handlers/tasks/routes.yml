@@ -1,0 +1,42 @@
+createTask:
+    handler: src/handlers/tasks/create.lambda_handler
+    role: arn:aws:iam::${self:custom.awsconfig.aws_account_id}:role/${self:custom.awsconfig.aws_role_lambda}
+    events:
+      - http:
+          path: tasks
+          method: post
+fetchTasks:
+  handler: src/handlers/tasks/fetch.lambda_handler
+  role: arn:aws:iam::${self:custom.awsconfig.aws_account_id}:role/${self:custom.awsconfig.aws_role_lambda}
+  events:
+    - http:
+        path: tasks
+        method: get
+findTask:
+  handler: src/handlers/tasks/find.lambda_handler
+  role: arn:aws:iam::${self:custom.awsconfig.aws_account_id}:role/${self:custom.awsconfig.aws_role_lambda}
+  events:
+    - http:
+        path: tasks/{id}
+        method: get
+completeTask:
+  handler: src/handlers/tasks/complete.lambda_handler
+  role: arn:aws:iam::${self:custom.awsconfig.aws_account_id}:role/${self:custom.awsconfig.aws_role_lambda}
+  events:
+    - http:
+        path: tasks/{id}/complete
+        method: patch
+updateTask:
+  handler: src/handlers/tasks/update.lambda_handler
+  role: arn:aws:iam::${self:custom.awsconfig.aws_account_id}:role/${self:custom.awsconfig.aws_role_lambda}
+  events:
+    - http:
+        path: tasks/{id}
+        method: put
+deleteTask:
+  handler: src/handlers/tasks/delete.lambda_handler
+  role: arn:aws:iam::${self:custom.awsconfig.aws_account_id}:role/${self:custom.awsconfig.aws_role_lambda}
+  events:
+    - http:
+        path: tasks/{id}
+        method: delete

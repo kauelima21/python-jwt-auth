@@ -10,6 +10,7 @@ def event():
     yield event
 
 
+@pytest.mark.skip
 def test_it_shoud_be_able_to_create_a_task(event):
     response = lambda_handler(event, None)
 

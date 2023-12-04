@@ -13,11 +13,11 @@ class TaskRepository(ABC):
         pass
 
     @abstractmethod
-    def delete(self, id: str) -> Task:
+    def delete(self, task: Task) -> Task:
         pass
 
     @abstractmethod
-    def complete(self, id: str) -> Task:
+    def complete(self, task: Task) -> Task:
         pass
 
     @abstractmethod
