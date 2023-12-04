@@ -20,7 +20,10 @@ class BotoTaskRepository(TaskRepository):
         response = self._table.query(
           KeyConditionExpression=Key("id").eq(id)
         )
-        
+
+        if len(response["Items"]) <= 0:
+          return None
+
         task = response["Items"][0]
 
         return task
