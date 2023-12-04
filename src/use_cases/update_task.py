@@ -12,16 +12,16 @@ class UpdateTaskUseCaseRequest(TypedDict):
 
 
 class UpdateTaskUseCase:
-  def __init__(self, task_repository: TaskRepository) -> None:
-    self._task_repository = task_repository
+    def __init__(self, task_repository: TaskRepository) -> None:
+        self._task_repository = task_repository
 
-  def execute(self, request: UpdateTaskUseCaseRequest):
-    task = self._task_repository.findById(request["id"])
+    def execute(self, request: UpdateTaskUseCaseRequest):
+        task = self._task_repository.findById(request["id"])
 
-    if not task:
-      raise ResourceNotFoundError("Resource Not Found")
+        if not task:
+            raise ResourceNotFoundError("Resource Not Found")
 
-    task["title"] = request.get("title") if request.get("title") else task["title"]
-    task["description"] = request.get("description") if request.get("description") else task["description"]
+        task["title"] = request.get("title") if request.get("title") else task["title"]
+        task["description"] = request.get("description") if request.get("description") else task["description"]
 
-    return self._task_repository.update(task)
+        return self._task_repository.update(task)

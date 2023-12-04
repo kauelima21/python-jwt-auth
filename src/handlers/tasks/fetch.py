@@ -5,14 +5,14 @@ from src.use_cases.fetch_tasks import FetchTasksUseCase
 
 
 def lambda_handler(event, context):
-  task_repository = BotoTaskRepository()
-  fetch_tasks_use_case = FetchTasksUseCase(task_repository)
-  tasks = fetch_tasks_use_case.execute()
+    task_repository = BotoTaskRepository()
+    fetch_tasks_use_case = FetchTasksUseCase(task_repository)
+    tasks = fetch_tasks_use_case.execute()
 
-  return {
-      "statusCode": 200,
-      "body": json.dumps(tasks),
-      "headers": {
-          "Content-Type": "application/json"
-      }
-  }
+    return {
+        "statusCode": 200,
+        "body": json.dumps(tasks),
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }

@@ -4,22 +4,23 @@ from src.repositories.boto.boto_task_repository import BotoTaskRepository
 
 
 def lambda_handler(event, context):
-  if not event.get('body'):
-    return None
+    if not event.get('body'):
+      return None
 
-  requestBody = json.loads(event.get('body'))
+    requestBody = json.loads(event.get('body'))
 
-  task_repository = BotoTaskRepository()
-  create_task_use_case = CreateTaskUseCase(task_repository)
-  create_task_use_case.execute({
-      "title": requestBody["title"],
-      "description": requestBody["description"]
-  })
+    task_repository = BotoTaskRepository()
+    create_task_use_case = CreateTaskUseCase(task_repository)
+    create_task_use_case.execute({
+        "title": requestBody["title"],
+        "description": requestBody["description"]
+    })
 
-  return {
-      "statusCode": 201,
-      "body": json.dumps(None),
-      "headers": {
-          "Content-Type": "application/json"
-      }
-  }
+    return {
+        "isBase64Encoded": False,
+        "statusCode": 201,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": json.dumps(None),
+    }

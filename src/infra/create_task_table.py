@@ -9,24 +9,24 @@ dynamodb = boto3.resource(
 
 
 def create_table():
-  table = dynamodb.create_table(
-      TableName="tasks",
-      KeySchema=[
-          {
-              "AttributeName": "id",
-              "KeyType": "HASH"  #Partition key
-          }
-      ],
-      AttributeDefinitions=[
-          {
-              "AttributeName": "id",
-              "AttributeType": "S"
-          }
-      ],
-      BillingMode="PAY_PER_REQUEST"
-  )
+    table = dynamodb.create_table(
+        TableName="tasks",
+        KeySchema=[
+            {
+                "AttributeName": "id",
+                "KeyType": "HASH"  #Partition key
+            }
+        ],
+        AttributeDefinitions=[
+            {
+                "AttributeName": "id",
+                "AttributeType": "S"
+            }
+        ],
+        BillingMode="PAY_PER_REQUEST"
+    )
 
-  print("Table status:", table.table_status)
+    print("Table status:", table.table_status)
 
 
 if __name__ == "__main__":

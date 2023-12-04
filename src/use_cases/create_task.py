@@ -5,20 +5,20 @@ from src.entities.task import Task
 
 
 class CreateTaskUseCaseRequest(TypedDict):
-  title: str
-  description: str
+    title: str
+    description: str
 
 
 class CreateTaskUseCase:
-  def __init__(self, task_repository: TaskRepository) -> None:
-    self._task_repository = task_repository
+    def __init__(self, task_repository: TaskRepository) -> None:
+        self._task_repository = task_repository
 
-  def execute(self, request: CreateTaskUseCaseRequest):
-    task = Task({
-      "title": request["title"],
-      "description": request["description"],
-      "created_at": datetime.now(),
-      "updated_at": datetime.now(),
-    })
+    def execute(self, request: CreateTaskUseCaseRequest):
+        task = Task({
+          "title": request["title"],
+          "description": request["description"],
+          "created_at": datetime.now(),
+          "updated_at": datetime.now(),
+        })
 
-    return self._task_repository.save(task)
+        return self._task_repository.save(task)
