@@ -19,3 +19,4 @@ A simple TODO CRUD example to practice.
 - [ ] Criar Layers e usar bibliotecas python
 - [ ] Adicionar fluxo CI para rodar testes unitarios durante push
 - [ ] Adicionar novos caso de usos para usar S3 e SES
+- [ ] Criar outro service e usar serverless-compose

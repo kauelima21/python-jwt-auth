@@ -1,0 +1,3 @@
+aws_config:
+  aws_account_id: ${aws:accountId}
+  log_retention_in_days: 7
