@@ -18,7 +18,14 @@ package:
     - '!tests/**/__pycache__'
     - '!./**'
     - '!tests/**'
+    - '!config/**'
     - src/**
+
+custom:
+  aws_config: ${file(config/aws-config.yml):aws_config}
+  table_config:
+    table_name: tasks
+    table_arn: arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/tasks
 
 provider:
   name: aws
@@ -26,17 +33,7 @@ provider:
   memorySize: 128
   stage: ${opt:stage, 'dev'}
   region: 'sa-east-1'
-  logRetentionInDays: 7
-  environment:
-    TABLE_NAME: tasks
-    ACCOUNT_ID: ${aws:accountId}
-
-custom:
-  aws_config:
-    aws_account_id: ${self:provider.environment.ACCOUNT_ID}
-  table_config:
-    table_name: ${self:provider.environment.TABLE_NAME}
-    table_arn: arn:aws:dynamodb:${self:provider.region}:${self:provider.environment.ACCOUNT_ID}:table/${self:provider.environment.TABLE_NAME}
+  logRetentionInDays: ${self:custom.aws_config.log_retention_in_days}
 
 functions:
   - ${file(src/handlers/tasks/routes.yml)}
