@@ -20,11 +20,6 @@ package:
     - '!tests/**'
     - src/**
 
-custom:
-  awsconfig:
-    aws_account_id: 974211203733
-    aws_role_lambda: LambdaDynamoTasksRole
-
 provider:
   name: aws
   runtime: python3.8
@@ -32,6 +27,13 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: 'sa-east-1'
   logRetentionInDays: 7
+  environment:
+    ACCOUNT_ID: ${aws:accountId}
+
+custom:
+  awsconfig:
+    aws_account_id: ${self:provider.environment.ACCOUNT_ID}
+    aws_role_lambda: LambdaDynamoTasksRole
 
 functions:
   - ${file(src/handlers/tasks/routes.yml)}
