@@ -5,6 +5,7 @@ from src.utils.lambda_output import json_response
 
 
 logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 
 def lambda_handler(event, context):
