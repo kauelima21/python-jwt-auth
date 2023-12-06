@@ -2,8 +2,8 @@ service: crud-to-do
 
 frameworkVersion: ^3.22.0
 
-# plugins:
-#   - serverless-localstack
+plugins:
+  - serverless-iam-roles-per-function
 
 package:
   individually: true
@@ -28,12 +28,15 @@ provider:
   region: 'sa-east-1'
   logRetentionInDays: 7
   environment:
+    TABLE_NAME: tasks
     ACCOUNT_ID: ${aws:accountId}
 
 custom:
-  awsconfig:
+  aws_config:
     aws_account_id: ${self:provider.environment.ACCOUNT_ID}
-    aws_role_lambda: LambdaDynamoTasksRole
+  table_config:
+    table_name: ${self:provider.environment.TABLE_NAME}
+    table_arn: arn:aws:dynamodb:${self:provider.region}:${self:provider.environment.ACCOUNT_ID}:table/${self:provider.environment.TABLE_NAME}
 
 functions:
   - ${file(src/handlers/tasks/routes.yml)}
