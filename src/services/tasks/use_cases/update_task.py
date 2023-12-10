@@ -2,7 +2,7 @@ from typing import TypedDict, Optional
 from datetime import datetime
 from src.repositories.task_repository import TaskRepository
 from src.entities.task import Task
-from src.use_cases.errors.resource_not_found import ResourceNotFoundError
+from src.utils.errors.resource_not_found import ResourceNotFoundError
 
 
 class UpdateTaskUseCaseRequest(TypedDict):

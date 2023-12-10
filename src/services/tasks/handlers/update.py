@@ -1,8 +1,8 @@
 import json
 import logging
 from src.repositories.boto.boto_task_repository import BotoTaskRepository
-from src.use_cases.errors.resource_not_found import ResourceNotFoundError
-from src.use_cases.update_task import UpdateTaskUseCase
+from src.utils.errors.resource_not_found import ResourceNotFoundError
+from src.services.tasks.use_cases.update_task import UpdateTaskUseCase
 from src.utils.lambda_output import json_response
 
 

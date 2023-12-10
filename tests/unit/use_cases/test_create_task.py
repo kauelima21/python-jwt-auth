@@ -1,6 +1,6 @@
 import pytest
 from src.repositories.in_memory.in_memory_task_repository import InMemoryTaskRepository
-from src.use_cases.create_task import CreateTaskUseCase
+from src.services.tasks.use_cases.create_task import CreateTaskUseCase
 
 
 @pytest.fixture()

@@ -1,0 +1,6 @@
+services:
+  tasks-service:
+    path: src/services/tasks
+
+  # login-service:
+  #   path: src/services/login

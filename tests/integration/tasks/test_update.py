@@ -1,6 +1,9 @@
 import json
 import pytest
-from src.handlers.tasks.update import lambda_handler
+from moto import mock_dynamodb
+from src.infra.create_tasks_table import create_table
+from src.services.tasks.handlers.update import lambda_handler
+from tests.fixtures.tasks import populate_moto_table
 
 
 @pytest.fixture()
@@ -14,8 +17,10 @@ def event():
     yield event
 
 
-@pytest.mark.skip
-def test_it_shoud_be_able_to_update_a_task(event):
+@mock_dynamodb
+def test_it_shoud_be_able_to_update_a_task(event, populate_moto_table):
+    create_table()
+    populate_moto_table(event["pathParameters"]["id"])
     response = lambda_handler(event, None)
     task = json.loads(response["body"])
 

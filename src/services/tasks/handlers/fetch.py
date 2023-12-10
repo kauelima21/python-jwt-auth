@@ -1,6 +1,6 @@
 import logging
 from src.repositories.boto.boto_task_repository import BotoTaskRepository
-from src.use_cases.fetch_tasks import FetchTasksUseCase
+from src.services.tasks.use_cases.fetch_tasks import FetchTasksUseCase
 from src.utils.lambda_output import json_response
 
 
@@ -16,3 +16,4 @@ def lambda_handler(event, context):
     logging.info(tasks)
 
     return json_response(tasks)
+

@@ -1,7 +1,7 @@
 import pytest
 from src.repositories.in_memory.in_memory_task_repository import InMemoryTaskRepository
-from src.use_cases.errors.resource_not_found import ResourceNotFoundError
-from src.use_cases.update_task import UpdateTaskUseCase
+from src.utils.errors.resource_not_found import ResourceNotFoundError
+from src.services.tasks.use_cases.update_task import UpdateTaskUseCase
 
 
 @pytest.fixture()

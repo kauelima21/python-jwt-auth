@@ -1,5 +1,5 @@
 from src.repositories.task_repository import TaskRepository
-from src.use_cases.errors.resource_not_found import ResourceNotFoundError
+from src.utils.errors.resource_not_found import ResourceNotFoundError
 
 
 class DeleteTaskUseCase:

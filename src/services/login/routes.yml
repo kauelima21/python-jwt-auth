@@ -1,0 +1,17 @@
+registerUser:
+  handler: handlers/register.lambda_handler
+  events:
+    - http:
+        path: users
+        method: post
+  package:
+    patterns:
+      - handlers/register.py
+      # - ../../../repositories/boto/boto_task_repository.py
+      - ../../../use_cases/register_user.py
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+      Resource:
+        - ${self:custom.table_config.table_arn}

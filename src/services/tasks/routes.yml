@@ -1,9 +1,13 @@
 createTask:
-  handler: src/handlers/tasks/create.lambda_handler
+  handler: src/services/tasks/handlers/create.lambda_handler
   events:
     - http:
         path: tasks
         method: post
+  package:
+    patterns:
+      - ../../../src/services/tasks/handlers/create.py
+      - ../../../src/services/tasks/use_cases/create_task.py
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -11,11 +15,15 @@ createTask:
       Resource:
         - ${self:custom.table_config.table_arn}
 fetchTasks:
-  handler: src/handlers/tasks/fetch.lambda_handler
+  handler: src/services/tasks/handlers/fetch.lambda_handler
   events:
     - http:
         path: tasks
         method: get
+  package:
+    patterns:
+      - ../../../src/services/tasks/handlers/fetch.py
+      - ../../../src/services/tasks/use_cases/fetch_tasks.py
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -23,11 +31,15 @@ fetchTasks:
       Resource:
         - ${self:custom.table_config.table_arn}
 findTask:
-  handler: src/handlers/tasks/find.lambda_handler
+  handler: src/services/tasks/handlers/find.lambda_handler
   events:
     - http:
         path: tasks/{id}
         method: get
+  package:
+    patterns:
+      - ../../../src/services/tasks/handlers/find.py
+      - ../../../src/services/tasks/use_cases/find_task.py
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -35,11 +47,15 @@ findTask:
       Resource:
         - ${self:custom.table_config.table_arn}
 completeTask:
-  handler: src/handlers/tasks/complete.lambda_handler
+  handler: src/services/tasks/handlers/complete.lambda_handler
   events:
     - http:
         path: tasks/{id}/complete
         method: patch
+  package:
+    patterns:
+      - ../../../src/services/tasks/handlers/complete.py
+      - ../../../src/services/tasks/use_cases/complete_task.py
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -48,11 +64,15 @@ completeTask:
       Resource:
         - ${self:custom.table_config.table_arn}
 updateTask:
-  handler: src/handlers/tasks/update.lambda_handler
+  handler: src/services/tasks/handlers/update.lambda_handler
   events:
     - http:
         path: tasks/{id}
         method: put
+  package:
+    patterns:
+      - ../../../src/services/tasks/handlers/update.py
+      - ../../../src/services/tasks/use_cases/update_task.py
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -61,14 +81,19 @@ updateTask:
       Resource:
         - ${self:custom.table_config.table_arn}
 deleteTask:
-  handler: src/handlers/tasks/delete.lambda_handler
+  handler: src/services/tasks/handlers/delete.lambda_handler
   events:
     - http:
         path: tasks/{id}
         method: delete
+  package:
+    patterns:
+      - ../../../src/services/tasks/handlers/delete.py
+      - ../../../src/services/tasks/use_cases/delete_task.py
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:DeleteItem
+        - dynamodb:UpdateItem
       Resource:
         - ${self:custom.table_config.table_arn}

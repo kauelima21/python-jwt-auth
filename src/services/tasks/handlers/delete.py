@@ -1,7 +1,7 @@
 import logging
 from src.repositories.boto.boto_task_repository import BotoTaskRepository
-from src.use_cases.delete_task import DeleteTaskUseCase
-from src.use_cases.errors.resource_not_found import ResourceNotFoundError
+from src.services.tasks.use_cases.delete_task import DeleteTaskUseCase
+from src.utils.errors.resource_not_found import ResourceNotFoundError
 from src.utils.lambda_output import json_response
 
 
@@ -23,6 +23,4 @@ def lambda_handler(event, context):
 
     logging.info(task)
 
-    return json_response({
-        "message": "Task {} deleted".format(task_id)
-    })
+    return json_response("Task {} deleted".format(task_id))

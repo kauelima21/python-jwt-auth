@@ -1,6 +1,6 @@
 import json
 import logging
-from src.use_cases.create_task import CreateTaskUseCase
+from src.services.tasks.use_cases.create_task import CreateTaskUseCase
 from src.repositories.boto.boto_task_repository import BotoTaskRepository
 from src.utils.lambda_output import json_response
 
