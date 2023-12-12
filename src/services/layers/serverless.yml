@@ -1,0 +1,22 @@
+service: layers-service
+
+frameworkVersion: ^3.22.0
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+    layer:
+      name: libs-${self:provider.stage}
+      description: "Layer which contains general services dependencies"
+      compatibleRuntimes:
+        - python3.8
+      compatibleArchitectures:
+        - x86_64
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'dev'}
+  region: 'sa-east-1'

@@ -5,6 +5,7 @@ from src.entities.task import Task
 
 
 class CreateTaskUseCaseRequest(TypedDict):
+    user_id: str
     title: str
     description: str
 
@@ -17,6 +18,7 @@ class CreateTaskUseCase:
         task = Task({
           "title": request["title"],
           "description": request["description"],
+          "user_id": request["user_id"],
           "created_at": datetime.now(),
           "updated_at": datetime.now(),
         })

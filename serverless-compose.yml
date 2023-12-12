@@ -2,5 +2,8 @@ services:
   tasks-service:
     path: src/services/tasks
 
-  # login-service:
-  #   path: src/services/login
+  login-service:
+    path: src/services/login
+
+  # layers-service:
+  #   path: src/services/layer

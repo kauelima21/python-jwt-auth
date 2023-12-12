@@ -1,7 +1,8 @@
 import logging
 from src.repositories.boto.boto_task_repository import BotoTaskRepository
 from src.services.tasks.use_cases.fetch_tasks import FetchTasksUseCase
-from src.utils.lambda_output import json_response
+from src.utils.errors.unauthorized import UnauthorizedError
+from src.utils.event import authorize_user, json_response
 
 
 logger = logging.getLogger()
@@ -9,11 +10,17 @@ logger.setLevel(logging.INFO)
 
 
 def lambda_handler(event, context):
-    task_repository = BotoTaskRepository()
-    fetch_tasks_use_case = FetchTasksUseCase(task_repository)
-    tasks = fetch_tasks_use_case.execute()
+    try:
+        user = authorize_user(event)
 
-    logging.info(tasks)
+        task_repository = BotoTaskRepository()
+        fetch_tasks_use_case = FetchTasksUseCase(task_repository)
+        tasks = fetch_tasks_use_case.execute(user.get("sub"))
 
-    return json_response(tasks)
+        logging.info(tasks)
 
+        return json_response(tasks)
+    except UnauthorizedError as e:
+        return json_response({
+            "message": e.args[0]
+        }, 401)

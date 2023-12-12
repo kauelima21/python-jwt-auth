@@ -2,7 +2,8 @@ import json
 import logging
 from src.services.tasks.use_cases.create_task import CreateTaskUseCase
 from src.repositories.boto.boto_task_repository import BotoTaskRepository
-from src.utils.lambda_output import json_response
+from src.utils.errors.unauthorized import UnauthorizedError
+from src.utils.event import authorize_user, json_response
 
 
 logger = logging.getLogger()
@@ -10,20 +11,28 @@ logger.setLevel(logging.INFO)
 
 
 def lambda_handler(event, context):
-    if not event.get('body'):
-        return None
+    try:
+        user = authorize_user(event)
 
-    requestBody = json.loads(event.get('body'))
-    
-    logging.info(requestBody)
+        if not event.get('body'):
+            return None
 
-    task_repository = BotoTaskRepository()
-    create_task_use_case = CreateTaskUseCase(task_repository)
-    created_task = create_task_use_case.execute({
-        "title": requestBody["title"],
-        "description": requestBody["description"]
-    })
+        requestBody = json.loads(event.get('body'))
 
-    logging.info(created_task)
+        logging.info(requestBody)
 
-    return json_response(None, 201)
+        task_repository = BotoTaskRepository()
+        create_task_use_case = CreateTaskUseCase(task_repository)
+        created_task = create_task_use_case.execute({
+            "user_id": user.get("sub"),
+            "title": requestBody["title"],
+            "description": requestBody["description"],
+        })
+
+        logging.info(created_task)
+
+        return json_response(None, 201)
+    except UnauthorizedError as e:
+        return json_response({
+            "message": e.args[0]
+        }, 401)

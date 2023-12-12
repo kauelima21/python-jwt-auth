@@ -8,6 +8,7 @@ def task_data():
     task_data = {
         "title": "My Task",
         "description": "This is my task.",
+        "user_id": "my-user",
     }
     yield task_data
 
@@ -17,7 +18,8 @@ def test_it_shoud_be_able_to_create_a_task(task_data):
     create_task_use_case = CreateTaskUseCase(task_repository)
     created_task = create_task_use_case.execute({
         "title": task_data["title"],
-        "description": task_data["description"]
+        "description": task_data["description"],
+        "user_id": task_data["user_id"],
     })
 
     assert created_task.title == task_data["title"]

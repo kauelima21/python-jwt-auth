@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import List
-from src.entities.task import Task
+from src.entities.task import Task, TaskProps
 from src.repositories.task_repository import TaskRepository
 
 
@@ -14,43 +14,46 @@ class InMemoryTaskRepository(TaskRepository):
         if len(task_array) <= 0:
           return None
 
-        return task_array[0]
+        return Task(task_array[0], task_array[0]["id"])
 
-    def findAll(self) -> List[Task]:
-        return self._data
+    def fetchByUser(self, user_id: str) -> List[TaskProps]:
+        filtered_task = filter(lambda task: task.get("user_id") == user_id, self._data)
+        task_array = list(filtered_task)
+        if len(task_array) <= 0:
+          return None
+
+        return task_array
 
     def delete(self, task: Task) -> Task:
         index = 0
-        task_to_delete = None
 
-        for i, task in enumerate(self._data):
-          if task.get("id") == task.get("id"):
+        for i, item in enumerate(self._data):
+          if item.get("id") == task.id:
             index = i
-            task_to_delete = task
 
         self._data.pop(index)
-        return task_to_delete
+        return task
 
     def complete(self, task: Task) -> Task:
         index = 0
         task_to_complete = None
 
-        for i, task in enumerate(self._data):
-          if task.get("id") == task.get("id"):
+        for i, item in enumerate(self._data):
+          if item.get("id") == task.id:
             index = i
-            task_to_complete = task
+            task_to_complete = item
 
         task_to_complete["completed_at"] = datetime.now()
         task_to_complete["updated_at"] = datetime.now()
 
         self._data[index] = task_to_complete
-        return task_to_complete
+        return Task(task_to_complete, task_to_complete["id"])
 
     def update(self, task: Task) -> Task:
         index = 0
 
         for i, item in enumerate(self._data):
-          if item.get("id") == task.get("id"):
+          if item.get("id") == task.id:
             index = i
 
         self._data[index] = task
@@ -58,4 +61,4 @@ class InMemoryTaskRepository(TaskRepository):
 
     def save(self, task: Task) -> Task:
         self._data.append(task)
-        return self._data[-1]
+        return task

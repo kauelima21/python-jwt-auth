@@ -21,7 +21,7 @@ class UpdateTaskUseCase:
         if not task:
             raise ResourceNotFoundError("Resource Not Found")
 
-        task["title"] = request.get("title") if request.get("title") else task["title"]
-        task["description"] = request.get("description") if request.get("description") else task["description"]
+        task.title = request.get("title") if request.get("title") else task.title
+        task.description = request.get("description") if request.get("description") else task.description
 
         return self._task_repository.update(task)

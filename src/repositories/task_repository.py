@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
-from src.entities.task import Task
+from src.entities.task import Task, TaskProps
 
 
 class TaskRepository(ABC):
@@ -9,7 +9,7 @@ class TaskRepository(ABC):
         pass
 
     @abstractmethod
-    def findAll(self) -> List[Task]:
+    def fetchByUser(self, user_id: str) -> List[TaskProps]:
         pass
 
     @abstractmethod

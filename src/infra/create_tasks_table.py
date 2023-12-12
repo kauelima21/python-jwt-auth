@@ -12,15 +12,31 @@ def create_table():
         KeySchema=[
             {
                 "AttributeName": "id",
-                "KeyType": "HASH"  #Partition key
+                "KeyType": "HASH"
             }
         ],
         AttributeDefinitions=[
             {
                 "AttributeName": "id",
                 "AttributeType": "S"
+            },
+            {
+                "AttributeName": "user_id",
+                "AttributeType": "S"
             }
         ],
+         GlobalSecondaryIndexes=[{
+            "IndexName": "user_id-index",
+            "KeySchema": [
+                {
+                    "AttributeName": "user_id",
+                    "KeyType": "HASH"
+                }
+            ],
+            "Projection": {
+                "ProjectionType": "ALL"
+            }
+        }],
         ProvisionedThroughput={
             'ReadCapacityUnits': 10,
             'WriteCapacityUnits': 10

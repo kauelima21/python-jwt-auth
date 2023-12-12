@@ -14,7 +14,7 @@ class UserProps(TypedDict):
 
 class User:
     def __init__(self, props: UserProps, id: str = None) -> None:
-        self.props = props
+        self.props = self._prepare_props(props)
         self._id = id if id else uuid.uuid4()
 
     @property
@@ -44,3 +44,20 @@ class User:
     @property
     def updated_at(self):
         return self.props.get("updated_at")
+    
+    def _prepare_props(self, props: UserProps):
+        prepared_props = {
+            "username": props.get("username"),
+            "email": props.get("email"),
+            "password_hash": props.get("password_hash"),
+            "created_at": props.get("created_at"),
+            "updated_at": props.get("updated_at"),
+        }
+
+        if props.get("validated_at"):
+            prepared_props["validated_at"] = props.get("validated_at")
+
+        if props.get("id"):
+            prepared_props["id"] = props.get("id")
+
+        return prepared_props

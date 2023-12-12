@@ -7,4 +7,6 @@
   "yaml.schemas": {
     "https://json-schema.org/draft-07/schema#": ["routes.yml", "serverless.yml"],
   },
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true
 }

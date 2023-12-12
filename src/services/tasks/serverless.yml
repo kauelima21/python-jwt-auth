@@ -18,6 +18,7 @@ package:
 
 custom:
   aws_config: ${file(../../../config/aws-config.yml):aws_config}
+  layer_config: ${file(../../../config/layer-config.yml):layer_config}
   table_config:
     table_name: tasks
     table_arn: arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/tasks
@@ -25,7 +26,7 @@ custom:
 provider:
   name: aws
   runtime: python3.8
-  memorySize: 128
+  memorySize: 256
   stage: ${opt:stage, 'dev'}
   region: 'sa-east-1'
   logRetentionInDays: ${self:custom.aws_config.log_retention_in_days}

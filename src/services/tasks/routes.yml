@@ -4,6 +4,8 @@ createTask:
     - http:
         path: tasks
         method: post
+  layers:
+    - ${self:custom.layer_config.arn}
   package:
     patterns:
       - ../../../src/services/tasks/handlers/create.py
@@ -20,6 +22,8 @@ fetchTasks:
     - http:
         path: tasks
         method: get
+  layers:
+    - ${self:custom.layer_config.arn}
   package:
     patterns:
       - ../../../src/services/tasks/handlers/fetch.py
@@ -27,7 +31,7 @@ fetchTasks:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - dynamodb:Scan
+        - dynamodb:Query
       Resource:
         - ${self:custom.table_config.table_arn}
 findTask:
@@ -36,6 +40,8 @@ findTask:
     - http:
         path: tasks/{id}
         method: get
+  layers:
+    - ${self:custom.layer_config.arn}
   package:
     patterns:
       - ../../../src/services/tasks/handlers/find.py
@@ -52,6 +58,8 @@ completeTask:
     - http:
         path: tasks/{id}/complete
         method: patch
+  layers:
+    - ${self:custom.layer_config.arn}
   package:
     patterns:
       - ../../../src/services/tasks/handlers/complete.py
@@ -69,6 +77,8 @@ updateTask:
     - http:
         path: tasks/{id}
         method: put
+  layers:
+    - ${self:custom.layer_config.arn}
   package:
     patterns:
       - ../../../src/services/tasks/handlers/update.py
@@ -86,6 +96,8 @@ deleteTask:
     - http:
         path: tasks/{id}
         method: delete
+  layers:
+    - ${self:custom.layer_config.arn}
   package:
     patterns:
       - ../../../src/services/tasks/handlers/delete.py

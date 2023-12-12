@@ -1,17 +1,38 @@
 registerUser:
-  handler: handlers/register.lambda_handler
+  handler: src/services/login/handlers/register.lambda_handler
   events:
     - http:
-        path: users
+        path: register
         method: post
+  layers:
+    - ${self:custom.layer_config.arn}
   package:
     patterns:
-      - handlers/register.py
-      # - ../../../repositories/boto/boto_task_repository.py
-      - ../../../use_cases/register_user.py
+      - ../../../src/services/login/handlers/register.py
+      - ../../../src/services/login/use_cases/register_user.py
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:PutItem
+        - dynamodb:Query
+      Resource:
+        - ${self:custom.table_config.table_arn}
+authenticateUser:
+  handler: src/services/login/handlers/authenticate.lambda_handler
+  events:
+    - http:
+        path: authenticate
+        method: post
+  layers:
+    - ${self:custom.layer_config.arn}
+  package:
+    patterns:
+      - ../../../src/services/login/handlers/authenticate.py
+      - ../../../src/services/login/use_cases/authenticate_user.py
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:Query
       Resource:
         - ${self:custom.table_config.table_arn}
