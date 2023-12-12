@@ -2,7 +2,7 @@ import boto3
 from boto3.dynamodb.conditions import Key
 from datetime import datetime
 from typing import List
-from src.entities.task import Task
+from src.entities.task import Task, TaskProps
 from src.repositories.task_repository import TaskRepository
 from botocore.exceptions import ClientError
 
@@ -24,23 +24,28 @@ class BotoTaskRepository(TaskRepository):
         if len(response["Items"]) <= 0:
           return None
 
-        task = response["Items"][0]
+        task = Task(response["Items"][0], response["Items"][0]["id"])
 
         return task
 
-    def findAll(self) -> List[Task]:
-        return self._table.scan()["Items"]
+    def fetchByUser(self, user_id: str) -> List[TaskProps]:
+        response = self._table.query(
+            IndexName="user_id-index",
+            KeyConditionExpression=Key("user_id").eq(user_id)
+        )
+
+        return response["Items"]
 
     def delete(self, task: Task) -> Task:
         self._table.delete_item(Key={
-            "id": task.get("id")
+            "id": task.id
         })
         return task
 
     def complete(self, task: Task) -> Task:
         response = self._table.update_item(
           Key={
-            "id": task.get("id")
+            "id": task.id
           },
           UpdateExpression="SET completed_at = :complete",
           ExpressionAttributeValues={
@@ -49,13 +54,13 @@ class BotoTaskRepository(TaskRepository):
           ReturnValues="ALL_NEW"
         )
 
-        task_completed = response["Attributes"]
-        return task_completed
+        completed_task = response["Attributes"]
+        return Task(completed_task, completed_task.get("id"))
 
     def update(self, task: Task) -> Task:
         response = self._table.update_item(
           Key={
-            "id": task.get("id")
+            "id": task.id
           },
           UpdateExpression="SET #uat = :uat, #ti = :ti, #desc = :desc",
           ExpressionAttributeNames={
@@ -65,14 +70,14 @@ class BotoTaskRepository(TaskRepository):
           },
           ExpressionAttributeValues={
               ":uat": str(datetime.now()),
-              ":ti": task.get("title"),
-              ":desc": task.get("description"),
+              ":ti": task.title,
+              ":desc": task.description,
           },
           ReturnValues="ALL_NEW"
         )
 
-        task_completed = response["Attributes"]
-        return task_completed
+        updated_task = response["Attributes"]
+        return Task(updated_task, updated_task.get("id"))
 
     def save(self, task: Task) -> Task:
         try:

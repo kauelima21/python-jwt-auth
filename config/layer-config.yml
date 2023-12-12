@@ -1,0 +1,2 @@
+layer_config:
+  arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:layer:libs-dev:1

@@ -1,61 +1,64 @@
 from datetime import datetime
 from typing import List
-from src.entities.task import Task
+from src.entities.task import Task, TaskProps
 from src.repositories.task_repository import TaskRepository
 
 
 class InMemoryTaskRepository(TaskRepository):
-  def __init__(self) -> None:
-    self._data = []
+    def __init__(self) -> None:
+        self._data = []
 
-  def findById(self, id: str) -> Task:
-    filtered_task = filter(lambda task: task.get("id") == id, self._data)
-    task_array = list(filtered_task)
-    if len(task_array) <= 0:
-      return None
+    def findById(self, id: str) -> Task:
+        filtered_task = filter(lambda task: task.get("id") == id, self._data)
+        task_array = list(filtered_task)
+        if len(task_array) <= 0:
+          return None
 
-    return task_array[0]
+        return Task(task_array[0], task_array[0]["id"])
 
-  def findAll(self) -> List[Task]:
-    return self._data
+    def fetchByUser(self, user_id: str) -> List[TaskProps]:
+        filtered_task = filter(lambda task: task.get("user_id") == user_id, self._data)
+        task_array = list(filtered_task)
+        if len(task_array) <= 0:
+          return None
 
-  def delete(self, task: Task) -> Task:
-    index = 0
-    task_to_delete = None
+        return task_array
 
-    for i, task in enumerate(self._data):
-      if task.get("id") == task.get("id"):
-        index = i
-        task_to_delete = task
+    def delete(self, task: Task) -> Task:
+        index = 0
 
-    self._data.pop(index)
-    return task_to_delete
+        for i, item in enumerate(self._data):
+          if item.get("id") == task.id:
+            index = i
 
-  def complete(self, task: Task) -> Task:
-    index = 0
-    task_to_complete = None
+        self._data.pop(index)
+        return task
 
-    for i, task in enumerate(self._data):
-      if task.get("id") == task.get("id"):
-        index = i
-        task_to_complete = task
+    def complete(self, task: Task) -> Task:
+        index = 0
+        task_to_complete = None
 
-    task_to_complete["validated_at"] = datetime.now()
-    task_to_complete["updated_at"] = datetime.now()
+        for i, item in enumerate(self._data):
+          if item.get("id") == task.id:
+            index = i
+            task_to_complete = item
 
-    self._data[index] = task_to_complete
-    return task_to_complete
+        task_to_complete["completed_at"] = datetime.now()
+        task_to_complete["updated_at"] = datetime.now()
 
-  def update(self, task: Task) -> Task:
-    index = 0
+        self._data[index] = task_to_complete
+        return Task(task_to_complete, task_to_complete["id"])
 
-    for i, item in enumerate(self._data):
-      if item.get("id") == task.get("id"):
-        index = i
+    def update(self, task: Task) -> Task:
+        index = 0
 
-    self._data[index] = task
-    return task
+        for i, item in enumerate(self._data):
+          if item.get("id") == task.id:
+            index = i
 
-  def save(self, task: Task) -> Task:
-    self._data.append(task)
-    return self._data[-1]
+        self._data[index] = task
+        return task
+
+    def save(self, task: Task) -> Task:
+        self._data.append(task)
+        return task

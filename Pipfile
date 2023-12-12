@@ -9,6 +9,7 @@ pytest = "*"
 boto3 = "*"
 botocore = "*"
 pyjwt = "*"
+bcrypt = "*"
 
 [dev-packages]
 

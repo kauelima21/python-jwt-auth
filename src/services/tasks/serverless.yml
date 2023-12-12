@@ -1,0 +1,35 @@
+service: tasks-service
+
+frameworkVersion: ^3.22.0
+
+plugins:
+  - serverless-iam-roles-per-function
+
+package:
+  individually: true
+  excludeDevDependencies: false
+  patterns:
+    - '!./**'
+    - '!./**/__pycache__'
+    - ../../../src/utils/**
+    - ../../../src/entities/task.py
+    - ../../../src/repositories/task_repository.py
+    - ../../../src/repositories/boto/boto_task_repository.py
+
+custom:
+  aws_config: ${file(../../../config/aws-config.yml):aws_config}
+  layer_config: ${file(../../../config/layer-config.yml):layer_config}
+  table_config:
+    table_name: tasks
+    table_arn: arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/tasks
+
+provider:
+  name: aws
+  runtime: python3.8
+  memorySize: 256
+  stage: ${opt:stage, 'dev'}
+  region: 'sa-east-1'
+  logRetentionInDays: ${self:custom.aws_config.log_retention_in_days}
+
+functions:
+  - ${file(routes.yml)}
